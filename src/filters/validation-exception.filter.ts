@@ -7,7 +7,6 @@ import {
 import { ValidationError } from 'class-validator';
 
 @Catch(BadRequestException)
-@Catch(BadRequestException)
 export class ValidationExceptionFilter implements ExceptionFilter {
   catch(exception: BadRequestException, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse();
