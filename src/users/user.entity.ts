@@ -24,13 +24,13 @@ export class User {
   userCity: string;
 
   @Column({ name: 'user_zipcode' })
-  userZipcode: Number;
+  userZipcode: number;
 
   @Column({ name: 'user_lat' })
-  userLat: Number;
+  userLat: number;
 
   @Column({ name: 'user_lng' })
-  userLng: string;
+  userLng: number;
 
   @Column({ name: 'phone' })
   phone: string;
