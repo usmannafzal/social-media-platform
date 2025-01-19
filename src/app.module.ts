@@ -14,7 +14,7 @@ import { User } from './users/user.entity';
       username: 'postgres',
       password: '1234',
       database: 'social-media-platform',
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true,
     }),
     UsersModule,
