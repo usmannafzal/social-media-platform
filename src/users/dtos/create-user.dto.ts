@@ -1,13 +1,19 @@
-import { IsDefined, IsEmail, IsString, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsEmail,
+  IsNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class Geo {
   @IsDefined()
-  @IsString()
+  @IsNumber()
   lat: string;
 
   @IsDefined()
-  @IsString()
+  @IsNumber()
   lng: string;
 }
 
@@ -25,13 +31,27 @@ class Address {
   city: string;
 
   @IsDefined()
-  @IsString()
-  zipcode: string;
+  @IsNumber()
+  zipcode: number;
 
   @IsDefined()
   @ValidateNested()
   @Type(() => Geo)
   geo: Geo;
+}
+
+class Company {
+  @IsDefined()
+  @IsString()
+  name: string;
+
+  @IsDefined()
+  @IsString()
+  catchPhrase: string;
+
+  @IsDefined()
+  @IsString()
+  bs: string;
 }
 
 export class CreateUserDto {
@@ -51,4 +71,9 @@ export class CreateUserDto {
   @ValidateNested()
   @Type(() => Address)
   address: Address;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Company)
+  company: Company;
 }
