@@ -51,4 +51,27 @@ export class UsersService {
     const savedUser = await this.repo.save(userEntity);
     return this.formatCreateResponse(savedUser);
   }
+
+  async createMany(data: CreateUserDto[]) {
+    const userEntities = data?.map((item) => {
+      const user = new User();
+      user.name = item.name;
+      user.userName = item.username;
+      user.email = item.email;
+      user.userStreet = item.address.street;
+      user.userSuite = item.address.suite;
+      user.userCity = item.address.city;
+      user.userZipcode = item.address.zipcode;
+      user.companyName = item.company.name;
+      user.companyCatchPhrase = item.company.catchPhrase;
+      user.companyBs = item.company.bs;
+      user.userLat = item.address.geo.lat;
+      user.userLng = item.address.geo.lng;
+      user.phone = item.phone;
+      user.website = item.website;
+      return user;
+    });
+    const savedUserEntities = await this.repo.save(userEntities);
+    return savedUserEntities.map((user) => this.formatCreateResponse(user));
+  }
 }

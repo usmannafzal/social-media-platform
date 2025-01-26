@@ -15,4 +15,9 @@ export class UsersController {
   createUser(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
+
+  @Post('/many')
+  createUsers(@Body() body: CreateUserDto[]) {
+    return this.usersService.createMany(body);
+  }
 }
