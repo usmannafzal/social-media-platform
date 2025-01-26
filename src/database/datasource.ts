@@ -7,8 +7,8 @@ export const dataSourceOptions: DataSourceOptions = {
   username: 'postgres',
   password: '1234',
   database: 'social-media-platform',
-  entities: ['src/**/*.entity.ts'],
-  migrations: ['src/database/migrations/*.ts'],
+  entities: ['dist/**/*.entity.js'],
+  migrations: ['dist/database/migrations/*.js'],
   synchronize: false,
 };
 
