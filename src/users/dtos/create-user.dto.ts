@@ -1,19 +1,13 @@
-import {
-  IsDefined,
-  IsEmail,
-  IsNumber,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsDefined, IsEmail, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class Geo {
   @IsDefined()
-  @IsNumber()
+  @IsString()
   lat: string;
 
   @IsDefined()
-  @IsNumber()
+  @IsString()
   lng: string;
 }
 
@@ -31,7 +25,7 @@ class Address {
   city: string;
 
   @IsDefined()
-  @IsNumber()
+  @IsString()
   zipcode: number;
 
   @IsDefined()
