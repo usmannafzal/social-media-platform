@@ -9,6 +9,30 @@ import { plainToInstance } from 'class-transformer';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
+  formatCreateResponse(user: any) {
+    return plainToInstance(CreateUserDto, {
+      id: user.id,
+      name: user.name,
+      username: user.userName,
+      email: user.email,
+      address: {
+        street: user.userStreet,
+        suite: user.userSuite,
+        city: user.userCity,
+        zipcode: user.userZipcode,
+        geo: {
+          lat: user.userLat,
+          lng: user.userLng,
+        },
+      },
+      company: {
+        name: user.companyName,
+        catchPhrase: user.companyCatchPhrase,
+        bs: user.companyBs,
+      },
+    });
+  }
+
   async create(data: CreateUserDto) {
     const userEntity = plainToInstance(User, {
       ...data,
@@ -25,26 +49,6 @@ export class UsersService {
     });
 
     const savedUser = await this.repo.save(userEntity);
-
-    return plainToInstance(CreateUserDto, {
-      name: savedUser.name,
-      username: savedUser.userName,
-      email: savedUser.email,
-      address: {
-        street: savedUser.userStreet,
-        suite: savedUser.userSuite,
-        city: savedUser.userCity,
-        zipcode: savedUser.userZipcode,
-        geo: {
-          lat: savedUser.userLat,
-          lng: savedUser.userLng,
-        },
-      },
-      company: {
-        name: savedUser.companyName,
-        catchPhrase: savedUser.companyCatchPhrase,
-        bs: savedUser.companyBs,
-      },
-    });
+    return this.formatCreateResponse(savedUser);
   }
 }
