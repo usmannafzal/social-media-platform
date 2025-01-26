@@ -13,6 +13,6 @@ export class UsersController {
 
   @Post()
   createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body);
+    return this.usersService.create(body);
   }
 }

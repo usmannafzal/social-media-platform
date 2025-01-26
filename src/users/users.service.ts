@@ -20,6 +20,10 @@ export class UsersService {
     user.companyName = data.company.name;
     user.companyCatchPhrase = data.company.catchPhrase;
     user.companyBs = data.company.bs;
+    user.userLat = data.address.geo.lat;
+    user.userLng = data.address.geo.lng;
+    user.phone = data.phone;
+    user.website = data.website;
     return this.repo.save(user);
   }
 }

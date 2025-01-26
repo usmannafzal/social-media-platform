@@ -26,7 +26,7 @@ class Address {
 
   @IsDefined()
   @IsString()
-  zipcode: number;
+  zipcode: string;
 
   @IsDefined()
   @ValidateNested()
@@ -60,6 +60,14 @@ export class CreateUserDto {
   @IsDefined()
   @IsEmail()
   email: string;
+
+  @IsDefined()
+  @IsString()
+  phone: string;
+
+  @IsDefined()
+  @IsString()
+  website: string;
 
   @IsDefined()
   @ValidateNested()
