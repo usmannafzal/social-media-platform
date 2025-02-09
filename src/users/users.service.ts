@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { plainToInstance } from 'class-transformer';
 
@@ -9,32 +9,16 @@ import { plainToInstance } from 'class-transformer';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  formatCreateResponse(user: any) {
-    return plainToInstance(CreateUserDto, {
-      id: user.id,
-      name: user.name,
-      username: user.userName,
-      email: user.email,
-      address: {
-        street: user.userStreet,
-        suite: user.userSuite,
-        city: user.userCity,
-        zipcode: user.userZipcode,
-        geo: {
-          lat: user.userLat,
-          lng: user.userLng,
-        },
-      },
-      company: {
-        name: user.companyName,
-        catchPhrase: user.companyCatchPhrase,
-        bs: user.companyBs,
-      },
-    });
-  }
+  async getAll(page?: number) {
+    const paginationSize = 10;
 
-  getAll() {
-    return this.repo.find();
+    if (!page) return this.repo.find();
+
+    const data = await this.repo.findAndCount({
+      skip: (page - 1) * paginationSize,
+      take: paginationSize,
+    });
+    return data;
   }
 
   async create(data: CreateUserDto) {
@@ -74,9 +58,17 @@ export class UsersService {
       user.website = item.website;
       return user;
     });
-    const savedUserEntities = await this.repo.save(userEntities);
-    return savedUserEntities.map((user) => this.formatCreateResponse(user));
+    return this.repo.save(userEntities);
   }
 
-  getById(id: number) {}
+  async getById(id: number) {
+    try {
+      return await this.repo.findOneOrFail({ where: { id } });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+      throw error;
+    }
+  }
 }

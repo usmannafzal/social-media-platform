@@ -3,20 +3,25 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { CreateUserInterceptor } from './interceptors/create-user.inceptor';
+import { CreateUserInterceptor } from './interceptors/create-user.interceptor';
+import { CreateManyInterceptor } from './interceptors/create-many.interceptor';
+import { GetPaginatedInterceptor } from './interceptors/get-paginated.interceptor';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getAllUsers() {
-    return this.usersService.getAll();
+  @UseInterceptors(GetPaginatedInterceptor)
+  getAllUsers(@Query('page') page?: number) {
+    return this.usersService.getAll(page);
   }
 
   @Post()
@@ -26,12 +31,13 @@ export class UsersController {
   }
 
   @Post('/many')
+  @UseInterceptors(CreateManyInterceptor)
   createUsers(@Body() body: CreateUserDto[]) {
     return this.usersService.createMany(body);
   }
 
   @Get('/:id')
-  getUser(@Param('id') id: number) {
+  getUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getById(id);
   }
 }
