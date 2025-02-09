@@ -33,6 +33,10 @@ export class UsersService {
     });
   }
 
+  getAll() {
+    return this.repo.find();
+  }
+
   async create(data: CreateUserDto) {
     const userEntity = plainToInstance(User, {
       ...data,
@@ -48,8 +52,7 @@ export class UsersService {
       companyBs: data.company.bs,
     });
 
-    const savedUser = await this.repo.save(userEntity);
-    return this.formatCreateResponse(savedUser);
+    return this.repo.save(userEntity);
   }
 
   async createMany(data: CreateUserDto[]) {
@@ -74,4 +77,6 @@ export class UsersService {
     const savedUserEntities = await this.repo.save(userEntities);
     return savedUserEntities.map((user) => this.formatCreateResponse(user));
   }
+
+  getById(id: number) {}
 }
